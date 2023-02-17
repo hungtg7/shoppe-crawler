@@ -1,0 +1,22 @@
+services:
+  crawler:
+    build:
+      context: .
+      dockerfile: crawler/Dockerfile
+    volumes:
+      - shared-volume:/src/shared-volume
+
+  webapp:
+    build:
+      context: .
+      dockerfile: ./fe/Dockerfile 
+    restart: always
+    volumes:
+      - shared-volume:/src/src/storage
+    depends_on:
+      - crawler
+    ports:
+      - "3000:3000"
+
+volumes:
+  shared-volume:
