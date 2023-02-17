@@ -14,6 +14,7 @@ storage_path = "./shared-volume/{}.json"
 shop_id = ["220997827", "223946658"]
 
 
+# Create concurently task
 def get_data_task(session):
     tasks = []
     logger.info("Get Data...")
@@ -30,6 +31,7 @@ async def get_data(n, session):
     result = []
 
     while offset <= total:
+        # Get the item on url
         resp = await session.get(url.format(
             limit=limit, offset=offset, name=n), ssl=False)
         content = await resp.json()
@@ -49,6 +51,7 @@ async def get_data(n, session):
         f.write(json.dumps(result, indent=2))
 
 
+# Concurely call API
 async def call_api():
     async with aiohttp.ClientSession() as session:
         get_tasks = get_data_task(session)
